@@ -1,0 +1,29 @@
+version: '3'
+services:
+  apache2:
+    build:
+      context: ./apache2
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+#      - ./apache2/apache2.conf:/etc/apache2/apache2.conf
+      - ./apache2/mywebsite.conf:/etc/apache2/sites-available/mywebsite.conf
+      - ./app:/var/www/html
+    networks:
+      - backend
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/mywebsite.conf:/etc/nginx/conf.d/mywebsite.conf
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
